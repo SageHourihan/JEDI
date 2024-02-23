@@ -12,7 +12,7 @@ func main() {
 
 	flag.Visit(func(f *flag.Flag) {
 		if f.Name == "v" {
-			validate(*v)
+			read(*v)
 		} else if f.Name == "t" {
 			translate(*t)
 		}
