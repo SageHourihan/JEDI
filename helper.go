@@ -68,9 +68,62 @@ func read(file string) {
 
 	// convert response from read to
 	edi := string(body)
-	//TODO: add validate function
-	// rename read to translate possibly. 
+	validate(edi)
+}
 
+func validate(edi string) {
+
+	// trim json so its valid for ediNation
+	p := strings.Trim(edi, "[]")
+
+	// create a payload with the api respnse
+	payload := strings.NewReader(p)
+
+	// create HTTP client
+	client := &http.Client{}
+
+	// create HTTP request
+	req, err := http.NewRequest(method, x12_validate, payload)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// Set headers for the API request
+	req.Header.Add("Ocp-Apim-Subscription-Key", "3ecf6b1c5cf34bd797a5f4c57951a1cf")
+	req.Header.Add("Content-Type", "application/json")
+
+	// Send the request to the API
+	res, err := client.Do(req)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer res.Body.Close()
+
+	// Read and print the API response body
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// explicitly declaring response variable
+	var response Response
+	err = json.Unmarshal([]byte(body), &response)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	if response.Status == "success" {
+		fmt.Println("Valid EDI")
+	} else if response.Status == "error" {
+		message := response.Details[0].Message
+		segmentId := response.Details[0].SegmentId
+		msg := fmt.Sprintf("Error: %s - %s", message, segmentId)
+		fmt.Println(msg)
+	}
 }
 
 func translate(file string) {
