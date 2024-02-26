@@ -6,7 +6,11 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
+
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // struct to store our json response in
@@ -43,10 +47,11 @@ func check(e error) {
 
 func translate(file string, mode string) {
 
+	// reading the file
 	f, _ := os.ReadFile(file)
 
+	// sending request 
 	payload := strings.NewReader(string(f))
-
 	client := &http.Client{}
 	req, err := http.NewRequest(method, x12_read, payload)
 
@@ -75,15 +80,28 @@ func translate(file string, mode string) {
 	// convert response from read to
 	edi := string(body)
 
+	// if mode is translate, translate and write output
 	if mode == "t" {
+
+		// declaring var with json
+		newJSON := body
+
+		// removing result object from json
+		result := gjson.GetBytes(body, "#.Result")
+		for i := range result.Array() {
+			newJSON, err = sjson.DeleteBytes(newJSON, strconv.Itoa(i)+".Result")
+			check(err)
+		}
+
+		// creating path to write
 		f, err := os.Create("./tmp/output.txt")
 		check(err)
 
 		defer f.Close()
 
-		writeString := strings.Trim(edi, "[]")
-
-		f.WriteString(string(writeString))
+		// writing file
+		writeString := strings.Trim(string(newJSON), "[]")
+		f.WriteString(writeString)
 
 		fmt.Print("file written")
 	} else if mode == "v" {
