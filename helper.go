@@ -35,6 +35,12 @@ const x12_read string = "https://api.edination.com/v2/x12/read?ignoreNullValues=
 const x12_validate string = "https://api.edination.com/v2/x12/validate?basicSyntax=false&skipTrailer=false&structureOnly=false"
 const method string = "POST"
 
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
+
 func translate(file string, mode string) {
 
 	f, _ := os.ReadFile(file)
@@ -69,9 +75,18 @@ func translate(file string, mode string) {
 	// convert response from read to
 	edi := string(body)
 
-	if(mode == "t"){
-	//TODO: write logic to write translation to file
-	}else if (mode == "v"){
+	if mode == "t" {
+		f, err := os.Create("./tmp/output.txt")
+		check(err)
+
+		defer f.Close()
+
+		writeString := strings.Trim(edi, "[]")
+
+		f.WriteString(string(writeString))
+
+		fmt.Print("file written")
+	} else if mode == "v" {
 		validate(edi)
 	}
 }
