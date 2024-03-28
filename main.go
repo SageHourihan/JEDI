@@ -13,9 +13,9 @@ func main() {
 	//? i feel like there is a better way to do this
 	flag.Visit(func(f *flag.Flag) {
 		if f.Name == "v" {
-			translate(*v, f.Name)
+			translate(*v)//, f.Name)
 		} else if f.Name == "t" {
-			translate(*t, f.Name)
+			translate(*t)//, f.Name)
 		}
 	})
 }
