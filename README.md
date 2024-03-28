@@ -4,15 +4,14 @@ JEDΙ is a versatile Golang toolkit that empowers you to master the art of Elect
 
 ## Features
 ### 1. Translation
-The toolkit allows you to translate EDI files by interacting with the Edination API. It supports two main modes:
+The toolkit allows you to translate EDI files into JSON using the [edx12](https://github.com/arcward/edx12) library.
 
-- **Translate (mode: "t"):** Reads an EDI file, sends it to the Edination API for translation, and writes the translated JSON output to a file.
-
-- **Validate (mode: "v"):** Validates an EDI file using the Edination API and provides feedback on its status
+- **Translate (mode: "t"):** Takes an EDI file and writes the translated JSON output to a file.
 
 ### 2. Validation
 
-JEDΙ enables you to validate EDI data, ensuring its compliance with industry standards. The validation feature checks for basic syntax, structural correctness, and other relevant criteria using the Edination API.
+JEDΙ enables you to validate EDI data, ensuring its compliance with industry standards. The validation feature checks for basic syntax, structural correctness, and other relevant criteria using the [edx12](https://github.com/arcward/edx12) library.
+- **Validate (mode: "v"):** Validates an EDI file and provides feedback on its status
 
 ## Examples
 Translating a file
