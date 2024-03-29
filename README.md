@@ -14,7 +14,7 @@ myapp translate --file <file_path>
 
 Flags
 
-    `--file`: Path to the EDI file to be translated (required).
+    --file: Path to the EDI file to be translated (required).
 
 ### 2. Validation
 
@@ -26,7 +26,7 @@ myapp validate --file <file_path>
 
 Flags
 
-    `--file`: Path to the EDI file to be translated (required).
+    --file: Path to the EDI file to be translated (required).
 
 ## Examples
 
